@@ -90,7 +90,7 @@ def main():
 
     zero_mask = '/scratch3/users/francesco.carotenuto/scratch1/reg_1543_ds9.reg'
     zero_mask_keyword = 'reg_1543_ds9'
-    chanout_postpeel = cfg.CAL_3GC_PEEL_NCHAN/4
+    chanout_postpeel = cgf.WSC_CHANNELSOUT
 
 
     # Specify the directory to search
