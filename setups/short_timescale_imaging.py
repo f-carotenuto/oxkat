@@ -90,7 +90,7 @@ def main():
 
     zero_mask = '/scratch3/users/francesco.carotenuto/scratch1/reg_1543_ds9.reg'
     zero_mask_keyword = 'reg_1543_ds9'
-    chanout_postpeel = cgf.WSC_CHANNELSOUT
+    chanout_postpeel = cfg.WSC_CHANNELSOUT
 
 
     # Specify the directory to search
@@ -201,7 +201,7 @@ def main():
             step['pbs_config'] = cfg.PBS_WSCLEAN
             absmem = gen.absmem_helper(step,INFRASTRUCTURE,cfg.WSC_ABSMEM)
             syscall = CONTAINER_RUNNER+WSCLEAN_CONTAINER+' ' if USE_SINGULARITY else ''
-            syscall += gen.generate_syscall_predict(msname = myms, imgbase = postpeel_mask_prefix, chanout = chanout_postpeel, absmem = absmem)
+            syscall += gen.generate_syscall_predict(msname = myms, imgbase = postpeel_mask_prefix, absmem = absmem)
             step['syscall'] = syscall
             steps.append(step)
             print(syscall)
@@ -228,9 +228,7 @@ def main():
                 targetname = ss[0]
                 scans = ss[1]
                 intervals = ss[2]
-                print('Target:    '+targetname)
-                print('Scans:     '+str(scans))
-                print('Intervals: '+str(intervals))
+                
                 for i in range(0,len(scans)):
                     myms = glob.glob('*'+targetname+'.ms')
                     if len(myms) == 1:
@@ -239,6 +237,10 @@ def main():
                             opdir = 'INTERVALS/'+targetname+'_scan'+str(scans[i])
                             if not os.path.isdir(opdir):
                                 os.mkdir(opdir)
+
+                            print('Target:    '+targetname)
+                            print('Scans:     '+str(scans))
+                            print('Intervals: '+str(intervals))
 
                             imgname = opdir+'/img_'+myms+'_modelsub'
                             code = 'intrvl'+str(scans[i])
