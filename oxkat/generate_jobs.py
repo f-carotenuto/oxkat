@@ -658,6 +658,40 @@ def generate_syscall_predict(msname,
     return syscall 
 
 
+def generate_syscall_predict_postpeel(msname,
+                            imgbase,
+                            #chanout = cfg.WSC_CHANNELSOUT,
+                            #usewgridder = cfg.WSC_USEWGRIDDER,
+#                            imsize = cfg.WSC_IMSIZE,
+#                            cellsize = cfg.WSC_CELLSIZE,
+#                            predictchannels = cfg.WSC_PREDICTCHANNELS,
+                            mem = cfg.WSC_MEM,
+                            absmem = cfg.WSC_ABSMEM):
+
+    # Generate system call to run wsclean in predict mode
+
+    syscall = 'wsclean '
+    syscall += '-log-time '
+    syscall += '-predict '
+    #syscall += '-field '+str(field)+' '
+    #if usewgridder:
+        #syscall += '-use-wgridder '
+    #if not usewgridder:
+        #syscall += '-nwlayers-factor '+str(nwlayersfactor)+' '
+    #syscall += '-channels-out '+str(chanout)+' '
+#    syscall += '-size '+str(imsize)+' '+str(imsize)+' '
+#    syscall += '-scale '+cellsize+' '
+    syscall += '-name '+imgbase+' '
+    if absmem < 0:
+        syscall += '-mem '+str(mem)+' '
+    else:
+        syscall += '-abs-mem '+str(absmem)+' '
+#    syscall += '-predict-channels '+str(predictchannels)+' '
+    syscall += msname
+
+    return syscall 
+
+
 
 def generate_syscall_makemask(restoredimage,
                             outfile = '',
