@@ -146,6 +146,7 @@ def main():
         master_ms = master_ms[tt]
         CAL_3GC_PEEL_REGION = cfg.CAL_3GC_PEEL_REGION
         skip = False
+        
 
         if not o.isdir(myms):
             gen.print_spacer()
@@ -228,13 +229,14 @@ def main():
                 targetname = ss[0]
                 scans = ss[1]
                 intervals = ss[2]
-                
+            
                 for i in range(0,len(scans)):
                     myms = glob.glob('*'+targetname+'.ms')
                     if len(myms) == 1:
                         myms = myms[0]
                         if os.path.isdir(myms):
                             opdir = 'INTERVALS/'+targetname+'_scan'+str(scans[i])
+                            print(targetname)
                             if not os.path.isdir(opdir):
                                 os.mkdir(opdir)
 
@@ -257,8 +259,9 @@ def main():
             print('\n')
             
             target_steps.append((steps,kill_file,targetname))
-
-
+            
+            print(target_steps)
+            
             # ------------------------------------------------------------------------------
             #
             # Write the run file and kill file based on the recipe
@@ -280,7 +283,7 @@ def main():
 
 
         f.write('\n#---------------------------------------\n')
-        f.write('# '+targetname)
+        f.write('# '+target_names[0])
         f.write('\n#---------------------------------------\n')
 
         for step in steps:
@@ -314,7 +317,7 @@ def main():
             f.write(run_command)
 
         if INFRASTRUCTURE != 'node':
-            f.write('\n# Generate kill script for '+targetname+'\n')
+            f.write('\n# Generate kill script for '+target_names[0]+'\n')
         if INFRASTRUCTURE == 'idia' or INFRASTRUCTURE == 'hippo':
             kill = 'echo "scancel "$'+'" "$'.join(id_list)+' > '+kill_file+'\n'
             f.write(kill)
