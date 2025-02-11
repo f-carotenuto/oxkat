@@ -249,8 +249,8 @@ def main():
 
                             syscall = 'singularity exec '+WSCLEAN_CONTAINER+' '
                             syscall += 'wsclean -intervals-out '+str(intervals[i])+' -interval 0 '+str(intervals[i])+' '
-                            syscall += '-log-time -field 0 -no-dirty -make-psf -size 4680 4680 -scale 1.1asec -baseline-averaging 10 -no-update-model-required '
-                            syscall += '-nwlayers 1 -niter 0 -name '+imgname+' '
+                            syscall += '-log-time -field 0 -make-psf -size 4680 4680 -scale 1.1asec -baseline-averaging 10 -no-update-model-required '
+                            syscall += '-parallel-deconvolution 2560 -nwlayers 1 -gain 0.15 -mgain 0.9 -circular-beam -niter 1000 -name '+imgname+' '
                             syscall += '-weight briggs -0.3 -data-column CORRECTED_DATA -padding 1.2 -absmem 110 '+myms
               
             step['syscall'] = syscall
