@@ -114,6 +114,15 @@ SLURM_WSCLEAN = {
     'MEM': '230GB'
 }
 
+SLURM_WSCLEAN_PREDICT = {
+    'TIME': '12:00:00',
+    'PARTITION': 'Main',
+    'NTASKS': '1',
+    'NODES': '1',
+    'CPUS': '16',
+    'MEM': '128GB'
+}
+
 SLURM_EXTRALONG = {
     'TIME': '48:00:00',
     'PARTITION': 'Main',
