@@ -198,7 +198,7 @@ def main():
             step['comment'] = 'Predict sky model visibilities without the source into MODEL_DATA column of '+myms
             step['dependency'] = 0
             step['id'] = 'WS3PR'+code
-            step['slurm_config'] = cfg.SLURM_WSCLEAN
+            step['slurm_config'] = cfg.SLURM_WSCLEAN_PREDICT
             step['pbs_config'] = cfg.PBS_WSCLEAN
             absmem = gen.absmem_helper(step,INFRASTRUCTURE,cfg.WSC_ABSMEM)
             syscall = CONTAINER_RUNNER+WSCLEAN_CONTAINER+' ' if USE_SINGULARITY else ''
