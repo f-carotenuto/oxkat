@@ -88,7 +88,7 @@ def main():
     target_ms = project_info['target_ms']
     master_ms = project_info['master_ms']
 
-    zero_mask = '/mnt/ephem/francesco/reg_1543_ds9.reg'
+    zero_mask = '/scratch3/users/francesco.carotenuto/reg_1543_ds9.reg'
     zero_mask_keyword = 'reg_1543_ds9'
     chanout_postpeel = cfg.WSC_CHANNELSOUT
 
