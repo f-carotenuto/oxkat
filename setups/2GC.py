@@ -108,10 +108,8 @@ def main():
             mask0 = sorted(glob.glob(IMAGES+'/*'+filename_targetname+'*.mask0.fits'))
             if len(mask0) > 0:
                 mask = mask0[0]
-                automask = False
             else:
                 mask = False
-                automask = cfg.WSC_AUTOMASK
 
             k_outdir = GAINTABLES+'/delaycal_'+filename_targetname+'_'+stamp+'.cc/'
             k_outname = 'delaycal_'+filename_targetname+'_'+stamp
@@ -145,7 +143,6 @@ def main():
                         imgname = data_img_prefix,
                         datacol = 'DATA',
                         mask = mask,
-                        automask = automask,
                         absmem = absmem)
             step['syscall'] = syscall
             steps.append(step)
@@ -190,7 +187,6 @@ def main():
                         imgname = corr_img_prefix,
                         datacol = 'CORRECTED_DATA',
                         mask = mask,
-                        automask = automask,
                         absmem = absmem)
             step['syscall'] = syscall
             steps.append(step)

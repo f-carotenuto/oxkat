@@ -142,9 +142,6 @@ def main():
                         imgname = img_prefix,
                         datacol = 'DATA',
                         nomodel = True,
-                        automask = False,
-                        autothreshold = False,
-                        localrms = False,
                         mask = False,
                         absmem = absmem)
             step['syscall'] = syscall
