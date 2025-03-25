@@ -58,7 +58,7 @@ BINDPATH = '$PWD,'+CWD+','+BIND
 IDIA_CONTAINER_PATH = ['/idia/software/containers/',HOME+'/containers/']
 CHPC_CONTAINER_PATH = [HOME+'/containers/']
 HIPPO_CONTAINER_PATH = None
-NODE_CONTAINER_PATH = [HOME+'/containers/']
+NODE_CONTAINER_PATH = [HOME+'/containers/', '/mnt/ephem/containers/']
 
 
 ASTROPY_PATTERN = 'oxkat-0.41'
@@ -342,9 +342,9 @@ CAL_2GC_DELAYCAL_PARSET = DATA+'/cubical/2GC_delaycal.parset'
 CAL_3GC_PEEL_NCHAN = 32
 CAL_3GC_PEEL_BRIGGS = -0.6
 CAL_3GC_PEEL_DIR1COLNAME = 'DIR1_DATA'
-CAL_3GC_PEEL_REGION = '/scratch3/users/francesco.carotenuto/scratch1/reg_1543_peel_final.reg'  # Specify DS9 peeling region 
+CAL_3GC_PEEL_REGION = ''  # Specify DS9 peeling region 
                           # Leave blank to search for <fieldname>*peel*.reg in the current path
-CAL_3GC_PEEL_PARSET = DATA+'/cubical/3GC_peel.parset'
+CAL_3GC_PEEL_PARSET = DATA+'/cubical/3GC_peel_2dirs.parset'
 CAL_3GC_FACET_REGION = '' # Specify DS9 region to define tessel centres
                           # Leave blank to search for <fieldname>*facet*.reg in the current path
                           # Regions specified here and above will apply to all fields, and so can
@@ -413,13 +413,13 @@ WSC_FITSPECTRALPOL = 4
 WSC_JOINCHANNELS = True
 WSC_NONEGATIVE = False
 WSC_STOPNEGATIVE = False
-WSC_CIRCULARBEAM = True
+WSC_CIRCULARBEAM = False
 # Masking
 WSC_MASK = 'auto'
-WSC_THRESHOLD = 1e-6
-WSC_AUTOMASK = 4.0
+WSC_THRESHOLD = False
+WSC_AUTOMASK = 3.0
 WSC_AUTOTHRESHOLD = 1.0
-WSC_LOCALRMS = True
+WSC_LOCALRMS = False
 
 # Band modifiers
 if BAND == 'UHF':
