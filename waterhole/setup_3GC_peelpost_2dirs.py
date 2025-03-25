@@ -110,7 +110,7 @@ def main():
         if len(mask1) > 0:
             mask = mask1[0]
         else:
-            mask = 'auto'
+            mask = False
 
 
         # Generate output dir for CubiCal
@@ -165,7 +165,7 @@ def main():
         step['dependency'] = 0
         step['id'] = 'FXNAN'+code
         syscall = CONTAINER_RUNNER+CUBICAL_CONTAINER+' ' if USE_SINGULARITY else ''
-        syscall += 'python3 '+TOOLS+'/fix_nan_models.py '+prepeel_img_prefix+'-0'
+        syscall += 'python3 '+TOOLS+'/fix_nan_models.py '+prepeel_img_prefix
         step['syscall'] = syscall
         steps.append(step)
 

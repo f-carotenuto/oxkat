@@ -22,8 +22,6 @@ def hms2deg(hms,delimiter=':'):
     deg = 15.0*(h+(m/60.0)+(s/3600.0))
     return deg
 
-import re
-
 def dms2deg(dms):
     """
     Converts a declination string in various formats (e.g., -48:47:22.0742, -048.47.22.0742)
@@ -48,7 +46,6 @@ def dms2deg(dms):
 def arcsec2deg(value):
     return float(value) / 3600.0
 
-import re
 
 def process_region_file(region_file):
     """
@@ -136,7 +133,7 @@ def main():
     parser.add_option('--invert', dest='invert', help='Remove region instead of only keeping it', action='store_true', default=False)
     (options, args) = parser.parse_args()
     region_file = options.region_file
-    fits_file = options.fits_file
+    fits_prefix = options.fits_file
     invert = options.invert
 
     rectangles = process_region_file(region_file)
@@ -148,37 +145,50 @@ def main():
     print('Model suffix  : ' + suffix)
     spacer()
 
-    print('Reading       : ' + fits_file)
+    print('Reading       : ' + fits_prefix)
 
-    masked_fits = fits_file.replace('.fits', '-' + suffix + '-model.fits')
+    fitslist = sorted(glob.glob(f'{fits_prefix}*-model.fits'))
+    
+    for fitsfile in fitslist:
 
-    img = get_image(fits_file)
-    mask = img
+        print('Fixing NaNs   : ' + fitsfile)
 
-    hdulist = fits.open(fits_file)
-    w = wcs.WCS(hdulist[0].header)
-    ref_pix1 = hdulist[0].header['CRPIX1']
-    ref_pix2 = hdulist[0].header['CRPIX2']
-    pixscale = abs(hdulist[0].header['CDELT2'])
+        img = get_image(fitsfile)
+        mask = img
+        
 
-    for rectangle in rectangles:
-        ra, dec, width, height = rectangle
-        coord = (ra, dec, 0, 0)
-        pixels = w.wcs_world2pix([coord], 0)
-        xpix = pixels[0][0]
-        ypix = pixels[0][1]
-        wpix = width / pixscale
-        hpix = height / pixscale
-        print('Masking       : sky ' + fmt(ra) + ' ' + fmt(dec) + ' ' + fmt(width) + ' ' + fmt(height))
-        print('              : pixel ' + fmt(xpix) + ' ' + fmt(ypix) + ' ' + fmt(wpix) + ' ' + fmt(hpix))
-        mask = apply_rectangle(mask, xpix, ypix, wpix, hpix, invert)
+        hdulist = fits.open(fitsfile)
+        w = wcs.WCS(hdulist[0].header)
+        ref_pix1 = hdulist[0].header['CRPIX1']
+        ref_pix2 = hdulist[0].header['CRPIX2']
+        pixscale = abs(hdulist[0].header['CDELT2'])
 
-    masked_img = mask
-    print('Writing       : ' + masked_fits)
-    shutil.copyfile(fits_file, masked_fits)
-    flush_fits(masked_img, masked_fits)
+        maxval = numpy.max(img)
+        if numpy.isnan(maxval):
+                new_img = numpy.zeros((img.shape[0],img.shape[1]))
+                print('              : ' + 'zeroing NaN model')
+                flush_fits(new_img, fitsfile)
+        else:
+                print('              : ' + 'non-NaN, max = ', maxval)
 
-    spacer()
+        for rectangle in rectangles:
+            ra, dec, width, height = rectangle
+            coord = (ra, dec, 0, 0)
+            pixels = w.wcs_world2pix([coord], 0)
+            xpix = pixels[0][0]
+            ypix = pixels[0][1]
+            wpix = width / pixscale
+            hpix = height / pixscale
+            print('Masking       : sky ' + fmt(ra) + ' ' + fmt(dec) + ' ' + fmt(width) + ' ' + fmt(height))
+            print('              : pixel ' + fmt(xpix) + ' ' + fmt(ypix) + ' ' + fmt(wpix) + ' ' + fmt(hpix))
+            mask = apply_rectangle(mask, xpix, ypix, wpix, hpix, invert)
+
+        masked_img = mask
+        masked_fits = fitsfile.replace(fits_prefix, f'{fits_prefix}-{suffix}')
+        print('Writing       : ' + masked_fits)
+        shutil.copyfile(fitsfile, masked_fits)
+        flush_fits(masked_img, masked_fits)
+        spacer()
 
 if __name__ == '__main__':
     main()
