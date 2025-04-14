@@ -171,7 +171,7 @@ def main():
             # Image prefixes
             prepeel_img_prefix = IMAGES+'/img_'+myms+'_prepeel'
             postpeel_img_prefix = IMAGES+'/img_'+myms+'_postpeel'
-            postpeel_mask_prefix = IMAGES+'/img_'+myms+'_postpeel-'+zero_mask_keyword
+            postpeel_mask_prefix = IMAGES+'/img_'+myms+'_postpeel-MFS-model-'+zero_mask_keyword
             #dir1_img_prefix = prepeel_img_prefix+'-'+CAL_3GC_PEEL_REGION.split('/')[-1].split('.')[0]
 
             # Target-specific kill file
@@ -187,9 +187,11 @@ def main():
             syscall = CONTAINER_RUNNER+CUBICAL_CONTAINER+' ' if USE_SINGULARITY else ''
             syscall += 'python3 '+WATERHOLE+'/zero_mask_rectangle.py '
             syscall += '--region '+zero_mask+' '
-            syscall += '--fitsfile ' + postpeel_img_prefix + ' '
+            syscall += '--fitsfile '+IMAGES+POSTPEEL_MODEL+''
             step['syscall'] = syscall
             steps.append(step)
+            print(syscall)
+            print('\n')
 
             step = {}
             step['step'] = 1
@@ -200,9 +202,11 @@ def main():
             step['pbs_config'] = cfg.PBS_WSCLEAN
             absmem = gen.absmem_helper(step,INFRASTRUCTURE,cfg.WSC_ABSMEM)
             syscall = CONTAINER_RUNNER+WSCLEAN_CONTAINER+' ' if USE_SINGULARITY else ''
-            syscall += gen.generate_syscall_predict_postpeel(msname = myms, imgbase = postpeel_mask_prefix)
+            syscall += gen.generate_syscall_predict_postpeel(msname = myms, imgbase = postpeel_mask_prefix, absmem = absmem)
             step['syscall'] = syscall
             steps.append(step)
+            print(syscall)
+            print('\n')
 
             step = {}
             step['step'] = 2
@@ -213,6 +217,8 @@ def main():
             syscall += 'python3 tools/sum_MS_columns.py --src=MODEL_DATA --dest=CORRECTED_DATA --subtract '+myms
             step['syscall'] = syscall
             steps.append(step)
+            print(syscall)
+            print('\n')
         
             step = {}
             step['step'] = 3
@@ -238,21 +244,23 @@ def main():
                             print('Scans:     '+str(scans))
                             print('Intervals: '+str(intervals))
 
-                            imgname = opdir+'/img_'+myms+'_modelsub'
+                            imgname = opdir+'/img_'+myms+'_modelsub_dec'
                             code = 'intrvl'+str(scans[i])
 
                             syscall = 'singularity exec '+WSCLEAN_CONTAINER+' '
                             syscall += 'wsclean -intervals-out '+str(intervals[i])+' -interval 0 '+str(intervals[i])+' '
-                            #syscall += 'wsclean '
-                            syscall += '-log-time -field 0 -make-psf -size 10240 10240 -scale 1.1asec -use-wgridder -parallel-reordering 16 -parallel-gridding 16 -no-update-model-required '
-                            syscall += '-parallel-deconvolution 2560 -gain 0.15 -mgain 0.9 -niter 0 -name '+imgname+' '
-                            #syscall += '-channels-out 8 -fit-spectral-pol 4 -join-channels '
-                            syscall += '-weight briggs -0.3 -data-column CORRECTED_DATA -padding 1.2 -auto-threshold 1.0 -auto-mask 6.0 '+myms
+                            syscall += '-make-psf -size 10240 10240 -scale 1.1asec -use-wgridder -parallel-reordering 16 -parallel-gridding 16'
+                            syscall += '-no-update-model-required -parallel-deconvolution 2560 -gain 0.15 -mgain 0.9 -niter 1000 -name '+imgname+' '
+                            syscall += '-weight briggs -0.3 -auto-threshold 1.0 -auto-mask 6.0 -data-column CORRECTED_DATA -padding 1.2 -absmem 110 '+myms
               
             step['syscall'] = syscall
             steps.append(step)
+            print(syscall)
+            print('\n')
             
             target_steps.append((steps,kill_file,targetname))
+            
+            print(target_steps)
             
             # ------------------------------------------------------------------------------
             #
