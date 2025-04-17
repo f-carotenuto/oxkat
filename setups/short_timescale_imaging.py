@@ -249,7 +249,7 @@ def main():
 
                             syscall = 'singularity exec '+WSCLEAN_CONTAINER+' '
                             syscall += 'wsclean -intervals-out '+str(intervals[i])+' -interval 0 '+str(intervals[i])+' '
-                            syscall += '-make-psf -size 10240 10240 -scale 1.1asec -use-wgridder -parallel-reordering 16 -parallel-gridding 16'
+                            syscall += '-make-psf -size 10240 10240 -scale 1.1asec -use-wgridder -parallel-reordering 16 -parallel-gridding 16 '
                             syscall += '-no-update-model-required -parallel-deconvolution 2560 -gain 0.15 -mgain 0.9 -niter 1000 -name '+imgname+' '
                             syscall += '-weight briggs -0.3 -auto-threshold 1.0 -auto-mask 6.0 -data-column CORRECTED_DATA -padding 1.2 -absmem 110 '+myms
               
