@@ -171,7 +171,7 @@ def main():
             # Image prefixes
             prepeel_img_prefix = IMAGES+'/img_'+myms+'_prepeel'
             postpeel_img_prefix = IMAGES+'/img_'+myms+'_postpeel'
-            postpeel_mask_prefix = IMAGES+'/img_'+myms+'_postpeel-MFS-model-'+zero_mask_keyword
+            postpeel_mask_prefix = IMAGES+'/img_'+myms+'_postpeel-'+zero_mask_keyword
             #dir1_img_prefix = prepeel_img_prefix+'-'+CAL_3GC_PEEL_REGION.split('/')[-1].split('.')[0]
 
             # Target-specific kill file
@@ -187,7 +187,7 @@ def main():
             syscall = CONTAINER_RUNNER+CUBICAL_CONTAINER+' ' if USE_SINGULARITY else ''
             syscall += 'python3 '+WATERHOLE+'/zero_mask_rectangle.py '
             syscall += '--region '+zero_mask+' '
-            syscall += '--fitsfile '+IMAGES+POSTPEEL_MODEL+''
+            syscall += '--fitsfile ' + postpeel_img_prefix + ' '
             step['syscall'] = syscall
             steps.append(step)
             print(syscall)
