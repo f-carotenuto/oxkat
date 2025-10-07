@@ -58,7 +58,7 @@ BINDPATH = '$PWD,'+CWD+','+BIND
 IDIA_CONTAINER_PATH = ['/idia/software/containers/',HOME+'/containers/']
 CHPC_CONTAINER_PATH = [HOME+'/containers/']
 HIPPO_CONTAINER_PATH = None
-NODE_CONTAINER_PATH = [HOME+'/containers/', '/mnt/ephem/containers/']
+NODE_CONTAINER_PATH = ['/home/fcarotenuto/FXT1/containers']
 
 
 ASTROPY_PATTERN = 'oxkat-0.41'
