@@ -339,7 +339,7 @@ CAL_2GC_DELAYCAL_PARSET = DATA+'/cubical/2GC_delaycal.parset'
 # 3GC peeling settings
 #
 
-CAL_3GC_PEEL_NCHAN = 32
+CAL_3GC_PEEL_NCHAN = 16
 CAL_3GC_PEEL_BRIGGS = -0.6
 CAL_3GC_PEEL_DIR1COLNAME = 'DIR1_DATA'
 CAL_3GC_PEEL_REGION = ''  # Specify DS9 peeling region 
